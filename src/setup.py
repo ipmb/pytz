@@ -7,13 +7,15 @@ import os
 import os.path
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
+    # TODO: pickup all packages
+    find_packages = lambda: ["pytz"]
 
 me = 'Stuart Bishop'
 memail = 'stuart@stuartbishop.net'
-packages = ['pytz']
+packages = find_packages()
 resources = ['zone.tab', 'locales/pytz.pot']
 for dirpath, dirnames, filenames in os.walk(os.path.join('pytz', 'zoneinfo')):
     # remove the 'pytz' part of the path

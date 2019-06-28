@@ -8,6 +8,7 @@ See the datetime section of the Python Library Reference for information
 on how to use these modules.
 '''
 
+import importlib.resources
 import sys
 import datetime
 import os.path
@@ -92,8 +93,14 @@ def open_resource(name):
     if zoneinfo_dir is not None:
         filename = os.path.join(zoneinfo_dir, *name_parts)
     else:
-        filename = os.path.join(os.path.dirname(__file__),
-                                'zoneinfo', *name_parts)
+        try:
+            filename = os.path.join(os.path.dirname(__file__),
+                                    'zoneinfo', *name_parts)
+        except NameError:
+            return importlib.resources.open_binary(
+                ".".join(["pytz", "zoneinfo"] + name_parts[:-1]),
+                name_parts[-1]
+            )
         if not os.path.exists(filename):
             # http://bugs.launchpad.net/bugs/383171 - we avoid using this
             # unless absolutely necessary to help when a broken version of

@@ -126,6 +126,7 @@ upload_docs_pythonhosted: docs
 
 .stamp-tzinfo: .stamp-zoneinfo gen_tzinfo.py build/etc/zoneinfo/GMT
 	${PYTHON} gen_tzinfo.py ${TARGET}
+	for d in $(shell find build/etc/zoneinfo -type d); do touch $$d/__init__.py; done
 	rm -rf build/dist/pytz/zoneinfo
 	cp -a build/etc/zoneinfo build/dist/pytz/zoneinfo
 	touch $@
