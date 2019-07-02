@@ -17,12 +17,17 @@ me = 'Stuart Bishop'
 memail = 'stuart@stuartbishop.net'
 packages = find_packages()
 resources = ['zone.tab', 'locales/pytz.pot']
+new_resources = {}
 for dirpath, dirnames, filenames in os.walk(os.path.join('pytz', 'zoneinfo')):
     # remove the 'pytz' part of the path
+    resource_list = [f for f in filenames if os.path.splitext(f)[1] not in [".py", ".pyc"]]
+    if resource_list:
+        new_resources[dirpath.replace(os.path.sep, ".")] = resource_list
     basepath = dirpath.split(os.path.sep, 1)[1]
     resources.extend([os.path.join(basepath, filename)
                      for filename in filenames])
 package_data = {'pytz': resources}
+package_data.update(new_resources)
 
 assert len(resources) > 10, 'zoneinfo files not found!'
 
